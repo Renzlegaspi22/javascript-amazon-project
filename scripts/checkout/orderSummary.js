@@ -1,10 +1,9 @@
 import {cart, removeFromCart, updateDeliveryOption } from '../../data/cart.js';
-import {products} from '../../data/products.js';
+import {products, getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import {deliveryOptions} from '../../data/deliveryOptions.js';
-
+import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js';
 
 hello();
 
@@ -18,24 +17,12 @@ export function renderOrderSummary() {
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
 
-    let matchingProduct;
-
-    products.forEach((product) => {
-      if (product.id === productId) {
-          matchingProduct = product;
-      }
-    });
+    const matchingProduct = getProduct(productId);
 
     const deliveryOptionId = cartItem.
     deliveryOptionId;
     
-    let deliveryOption;
-
-    deliveryOptions.forEach((option) => {
-      if  (option.id === deliveryOptionId) {
-        deliveryOption = option;
-      }
-    });
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
 
     const today = dayjs();
       const deliveryDate = today.add(
@@ -67,8 +54,8 @@ export function renderOrderSummary() {
                     <span>
                       Quantity: <span class="quantity-label">${cartItem.quantity}</span>
                     </span>
-                    <span class="update-qulink-primary">
-                      Updateantity-link 
+                    <span class="update-quantity-link link-primary">
+                      Update
                     </span>
                     <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
                       Delete
@@ -155,3 +142,5 @@ export function renderOrderSummary() {
     });
   });
 }
+
+
